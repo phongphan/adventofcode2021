@@ -1,5 +1,6 @@
 (defpackage day01.main
   (:use :cl)
+  (:import-from :arrow-macros :->)
   (:export :run-1
            :run-2))
 
@@ -21,12 +22,23 @@
         counting (> (sum b) (sum a))))
 
 (defun run-1 ()
-  (let* ((input (read-input "input/1.txt"))
-         (pairs (make-groups (make-groups input 1) 2)))
-    (calc-depth-increase pairs)))
-
+  (-> (read-input "input/1.txt")
+    (make-groups 1)
+    (make-groups 2)
+    (calc-depth-increase)))
 
 (defun run-2 ()
-  (let* ((input (read-input "input/1.txt"))
-         (pairs (make-groups (make-groups input 3) 2)))
-    (calc-depth-increase pairs)))
+  (-> (read-input "input/1.txt")
+    (make-groups 3)
+    (make-groups 2)
+    (calc-depth-increase)))
+
+;; (defun run-1 ()
+;;   (let* ((input (read-input "input/1.txt"))
+;;          (pairs (make-groups (make-groups input 1) 2)))
+;;     (calc-depth-increase pairs)))
+
+;; (defun run-2 ()
+;;   (let* ((input (read-input "input/1.txt"))
+;;          (pairs (make-groups (make-groups input 3) 2)))
+;;     (calc-depth-increase pairs)))
