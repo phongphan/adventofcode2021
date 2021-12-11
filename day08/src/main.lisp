@@ -38,9 +38,9 @@
 
 (defun create-segment (combinator)
   (mapcar #'(lambda (n-segment)
-              (coerce
-               (mapcar #'(lambda (i) (nth i combinator)) n-segment)
-               'string))
+               (coerce
+                (sort (mapcar #'(lambda (i) (nth i combinator)) n-segment) #'char<)
+                'string))
           *n-segments*))
 
 (defun permutations (bag)
@@ -55,15 +55,17 @@
 
 (defparameter *segment-permutations* (mapcar #'create-segment (permutations *keys*)))
 
+(defun sort-all (input)
+  (loop for s in input
+        collect (coerce (sort (coerce s 'list) #'char<) 'string)))
+
 (defun find-observe (observe)
-  (find observe
-      *segment-permutations*
-      :test #'(lambda (a b)
-                (null (set-exclusive-or a b
-                                        :test #'(lambda (a b)
-                                                  (null
-                                                   (set-exclusive-or (coerce a 'list) (coerce b 'list)
-                                                                     :test #'eq))))))))
+  (find (sort-all observe)
+        *segment-permutations*
+        :test #'(lambda (a b)
+                  (null (set-exclusive-or a b
+                                          :test #'equal)))))
+
 
 (defun convert-digits (segments result)
   (position result segments :test #'(lambda (a b)
